@@ -1,0 +1,80 @@
+---
+title: "Create a Lead"
+description: "Insert a new Lead record into Salesforce production."
+---
+
+## Endpoint
+
+```http
+POST https://yourInstance.salesforce.com/services/data/v60.0/sobjects/Lead
+```
+
+## Required fields
+
+At minimum, every Lead must include **LastName** and **Company**.
+Use the [Describe endpoint](/lead-api/discover-fields) to discover additional required fields in your org.
+
+## Example request
+
+```bash
+curl -X POST "https://yourInstance.salesforce.com/services/data/v60.0/sobjects/Lead" \
+  -H "Authorization: Bearer ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "FirstName": "Jonathan",
+    "LastName": "Bissell",
+    "Company": "Example Company",
+    "Email": "jonathan@example.com",
+    "City": "Saxtons River",
+    "State": "VT"
+  }'
+```
+
+## Example request (HTTP)
+
+```http
+POST /services/data/v60.0/sobjects/Lead HTTP/1.1
+Host: yourInstance.salesforce.com
+Authorization: Bearer ACCESS_TOKEN
+Content-Type: application/json
+
+{
+  "FirstName": "Jonathan",
+  "LastName": "Bissell",
+  "Company": "Example Company",
+  "Email": "jonathan@example.com",
+  "City": "Saxtons River",
+  "State": "VT"
+}
+```
+
+## Example response — success
+
+```json
+{
+  "id": "00Q5e000001abc1EAA",
+  "success": true,
+  "errors": []
+}
+```
+
+**HTTP 201 Created** is returned on success.
+
+## Example response — validation error
+
+```json
+[
+  {
+    "message": "Required fields are missing: [LastName, Company]",
+    "errorCode": "REQUIRED_FIELD_MISSING",
+    "fields": ["LastName", "Company"]
+  }
+]
+```
+
+**HTTP 400 Bad Request** is returned when required fields are missing or values are invalid.
+
+<Warning>
+The create endpoint is **not idempotent**. Retrying a successful request creates a duplicate Lead.
+Use [Upsert by External ID](/lead-api/upsert-lead) instead for retry-safe ingestion.
+</Warning>

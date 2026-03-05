@@ -1,0 +1,42 @@
+---
+title: "Overview"
+description: "Salesforce Lead ingestion API — schema discovery, create, and upsert patterns."
+---
+
+## Purpose
+
+This integration pushes Lead records into **Salesforce production** via the Salesforce REST API.
+It supports three operations:
+
+1. **Discover** — query the Lead schema so your integration adapts to custom fields automatically.
+2. **Create** — insert a new Lead.
+3. **Upsert** — insert-or-update a Lead by an External ID field, preventing duplicates and making retries safe.
+
+## High-level flow
+
+```text
+1. Authenticate   →  obtain an OAuth access token
+2. Describe Lead  →  GET  /services/data/v60.0/sobjects/Lead/describe
+3. Create Lead    →  POST /services/data/v60.0/sobjects/Lead
+   — or —
+   Upsert Lead    →  PATCH /services/data/v60.0/sobjects/Lead/{ExternalIdField}/{value}
+```
+
+## Base URL
+
+All endpoints use your Salesforce production instance URL:
+
+```
+https://yourInstance.salesforce.com
+```
+
+Replace `yourInstance` with the subdomain shown in your browser when logged into Salesforce production (e.g., `na1`, `eu5`, or a My Domain like `acme.my`).
+
+<Tip>
+Use the **upsert** pattern whenever possible. It is idempotent — safe to retry without creating duplicates.
+</Tip>
+
+## Required fields
+
+At a minimum, Salesforce requires **LastName** and **Company** on every Lead record.
+Use the [Describe endpoint](/lead-api/discover-fields) to discover all required and optional fields dynamically.

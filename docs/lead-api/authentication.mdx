@@ -1,0 +1,63 @@
+---
+title: "Authentication"
+description: "Obtain and use Salesforce OAuth access tokens for production."
+---
+
+## OAuth 2.0 access tokens
+
+Every request to the Salesforce REST API must include an `Authorization` header with a valid Bearer token.
+
+```http
+Authorization: Bearer ACCESS_TOKEN
+```
+
+Replace `ACCESS_TOKEN` with a token obtained from the Salesforce OAuth token endpoint.
+
+## Token endpoint
+
+For **Salesforce production**:
+
+```
+https://login.salesforce.com/services/oauth2/token
+```
+
+For **sandbox** (testing only):
+
+```
+https://test.salesforce.com/services/oauth2/token
+```
+
+## Example token request
+
+```bash
+curl -X POST https://login.salesforce.com/services/oauth2/token \
+  -d "grant_type=password" \
+  -d "client_id=YOUR_CONNECTED_APP_CLIENT_ID" \
+  -d "client_secret=YOUR_CONNECTED_APP_CLIENT_SECRET" \
+  -d "username=YOUR_USERNAME" \
+  -d "password=YOUR_PASSWORD_PLUS_SECURITY_TOKEN"
+```
+
+<Warning>
+Never hard-code credentials or commit secrets to source control.
+Store `client_id`, `client_secret`, and passwords in a secrets manager or environment variables.
+</Warning>
+
+## Example response
+
+```json
+{
+  "access_token": "00D...!ARcAQ...",
+  "instance_url": "https://yourInstance.salesforce.com",
+  "token_type": "Bearer"
+}
+```
+
+Use `instance_url` from the response as the base URL for all subsequent API calls.
+
+## Best practices
+
+- Use a **dedicated integration user** with a profile scoped to only the objects and fields this integration needs.
+- Prefer the **OAuth 2.0 Client Credentials** or **JWT Bearer** flow over username-password in production.
+- Rotate secrets on a regular schedule.
+- Restrict the Connected App's IP ranges and OAuth scopes to the minimum required.

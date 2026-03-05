@@ -1,0 +1,226 @@
+openapi: 3.0.3
+info:
+  title: Salesforce Lead Ingestion API
+  description: |
+    Subset of the Salesforce REST API used for Lead ingestion.
+    All paths are relative to your Salesforce production instance URL
+    (e.g., https://yourInstance.salesforce.com).
+  version: "1.0.0"
+
+servers:
+  - url: https://yourInstance.salesforce.com
+    description: Salesforce production instance (replace yourInstance with your org's subdomain)
+
+security:
+  - bearerAuth: []
+
+paths:
+  /services/data/v60.0/sobjects/Lead/describe:
+    get:
+      operationId: describeLead
+      summary: Describe Lead object
+      description: Returns metadata for the Lead object including all fields, types, and constraints.
+      tags:
+        - Lead
+      responses:
+        "200":
+          description: Lead object metadata
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DescribeResult"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /services/data/v60.0/sobjects/Lead:
+    post:
+      operationId: createLead
+      summary: Create a Lead
+      description: Inserts a new Lead record. Requires at least LastName and Company.
+      tags:
+        - Lead
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LeadInput"
+      responses:
+        "201":
+          description: Lead created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SaveResult"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+  /services/data/v60.0/sobjects/Lead/{ExternalIdField}/{externalIdValue}:
+    patch:
+      operationId: upsertLead
+      summary: Upsert a Lead by External ID
+      description: |
+        Inserts or updates a Lead matched by the given External ID field and value.
+        Returns 201 if created, 204 if updated.
+      tags:
+        - Lead
+      parameters:
+        - name: ExternalIdField
+          in: path
+          required: true
+          description: API name of the External ID field (e.g., External_Id__c).
+          schema:
+            type: string
+            example: External_Id__c
+        - name: externalIdValue
+          in: path
+          required: true
+          description: The external ID value to match.
+          schema:
+            type: string
+            example: ABC123
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LeadInput"
+      responses:
+        "201":
+          description: Lead created (no match found)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SaveResult"
+        "204":
+          description: Lead updated (existing match found)
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Salesforce OAuth 2.0 access token
+
+  schemas:
+    LeadInput:
+      type: object
+      required:
+        - LastName
+        - Company
+      properties:
+        FirstName:
+          type: string
+          example: Jonathan
+        LastName:
+          type: string
+          example: Bissell
+        Company:
+          type: string
+          example: Example Company
+        Email:
+          type: string
+          format: email
+          example: jonathan@example.com
+        City:
+          type: string
+          example: Saxtons River
+        State:
+          type: string
+          example: VT
+      additionalProperties: true
+
+    SaveResult:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "00Q5e000001abc1EAA"
+        success:
+          type: boolean
+          example: true
+        errors:
+          type: array
+          items:
+            $ref: "#/components/schemas/ApiError"
+
+    ApiError:
+      type: object
+      properties:
+        message:
+          type: string
+        errorCode:
+          type: string
+        fields:
+          type: array
+          items:
+            type: string
+
+    DescribeResult:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Lead
+        fields:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              type:
+                type: string
+              length:
+                type: integer
+              nillable:
+                type: boolean
+              createable:
+                type: boolean
+              updateable:
+                type: boolean
+              picklistValues:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    value:
+                      type: string
+                    active:
+                      type: boolean
+
+  responses:
+    BadRequest:
+      description: Invalid payload — missing required fields, bad picklist value, or invalid field name.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/ApiError"
+    Unauthorized:
+      description: Access token is missing, expired, or invalid.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/ApiError"
+    Forbidden:
+      description: The authenticated user lacks permission on the Lead object.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/ApiError"

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "name": "API_END_POINT",
+  "theme": "quill",
+  "colors": {
+    "primary": "#0D9373",
+    "light": "#07C983",
+    "dark": "#0D9373"
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Salesforce Lead API",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "lead-api/overview",
+              "lead-api/authentication"
+            ]
+          },
+          {
+            "group": "Endpoints",
+            "pages": [
+              "lead-api/discover-fields",
+              "lead-api/create-lead",
+              "lead-api/upsert-lead"
+            ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "lead-api/errors-and-security"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "openapi": "openapi.yaml"
+}

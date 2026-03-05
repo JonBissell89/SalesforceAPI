@@ -1,0 +1,77 @@
+---
+title: "Upsert a Lead"
+description: "Insert or update a Lead by External ID — the preferred, retry-safe pattern for Salesforce production."
+---
+
+## Endpoint
+
+```http
+PATCH https://yourInstance.salesforce.com/services/data/v60.0/sobjects/Lead/{ExternalIdField}/{value}
+```
+
+Replace `{ExternalIdField}` with the API name of your External ID field and `{value}` with the record's external key.
+
+## Why upsert?
+
+- **Idempotent** — retrying the same request will not create duplicates.
+- **Atomic** — Salesforce checks for an existing match and either inserts or updates in a single call.
+- **Preferred pattern** for all production integrations.
+
+## Example External ID field
+
+In the examples below, the custom field `External_Id__c` is used.
+Replace it with whatever External ID field is defined on Lead in your org.
+
+## Example request
+
+```bash
+curl -X PATCH \
+  "https://yourInstance.salesforce.com/services/data/v60.0/sobjects/Lead/External_Id__c/ABC123" \
+  -H "Authorization: Bearer ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "FirstName": "Jonathan",
+    "LastName": "Bissell",
+    "Company": "Example Company",
+    "Email": "jonathan@example.com",
+    "City": "Saxtons River",
+    "State": "VT"
+  }'
+```
+
+## Example request (HTTP)
+
+```http
+PATCH /services/data/v60.0/sobjects/Lead/External_Id__c/ABC123 HTTP/1.1
+Host: yourInstance.salesforce.com
+Authorization: Bearer ACCESS_TOKEN
+Content-Type: application/json
+
+{
+  "FirstName": "Jonathan",
+  "LastName": "Bissell",
+  "Company": "Example Company",
+  "Email": "jonathan@example.com",
+  "City": "Saxtons River",
+  "State": "VT"
+}
+```
+
+## Responses
+
+| Outcome | HTTP Status | Body |
+|---|---|---|
+| New Lead created | **201 Created** | `{ "id": "00Q...", "success": true, "errors": [] }` |
+| Existing Lead updated | **204 No Content** | *(empty)* |
+| Validation error | **400 Bad Request** | Error array (see [Errors](/lead-api/errors-and-security)) |
+
+## Setting up an External ID field
+
+1. In Salesforce Setup, navigate to **Object Manager → Lead → Fields & Relationships**.
+2. Create a new custom field of type **Text** (or **Number**).
+3. Check **External ID** and (optionally) **Unique**.
+4. Save and note the API name (e.g., `External_Id__c`).
+
+<Tip>
+Mark the External ID field as **Unique** to let Salesforce enforce deduplication at the database level.
+</Tip>

@@ -1,0 +1,86 @@
+---
+title: "Errors & Security"
+description: "Common error codes and security best practices for the Salesforce Lead API."
+---
+
+## Common errors
+
+### 400 Bad Request
+
+Returned when the payload is invalid.
+
+| Error Code | Cause |
+|---|---|
+| `REQUIRED_FIELD_MISSING` | A required field like `LastName` or `Company` is missing. |
+| `INVALID_FIELD` | The request body contains a field API name that does not exist on Lead. |
+| `INVALID_TYPE` | A field value does not match the expected data type (e.g., string in a number field). |
+| `INVALID_OR_NULL_FOR_RESTRICTED_PICKLIST` | A picklist value is not in the allowed set. Use the [Describe endpoint](/lead-api/discover-fields) to get valid values. |
+
+```json
+[
+  {
+    "message": "Required fields are missing: [Company]",
+    "errorCode": "REQUIRED_FIELD_MISSING",
+    "fields": ["Company"]
+  }
+]
+```
+
+### 401 Unauthorized
+
+The access token is missing, expired, or invalid. Re-authenticate and retry.
+
+```json
+[
+  {
+    "message": "Session expired or invalid",
+    "errorCode": "INVALID_SESSION_ID"
+  }
+]
+```
+
+### 403 Forbidden
+
+The authenticated user does not have permission to create or update Lead records.
+Check the user's profile, permission sets, and field-level security.
+
+```json
+[
+  {
+    "message": "Insufficient access rights on object: Lead",
+    "errorCode": "INSUFFICIENT_ACCESS"
+  }
+]
+```
+
+## Security guidance
+
+Follow these practices when connecting to Salesforce production.
+
+### Use a dedicated integration user
+
+Create a Salesforce user specifically for this integration. Do not reuse a human user's credentials.
+Assign a profile with the **minimum** object and field permissions required.
+
+### Limit Connected App permissions
+
+- Restrict OAuth scopes to `api` and `refresh_token` only.
+- Set IP restrictions on the Connected App to allow only your integration servers.
+- Enable the **Require Proof Key for Code Exchange (PKCE)** option when possible.
+
+### Protect secrets
+
+- Store `client_id`, `client_secret`, and tokens in a secrets manager (e.g., AWS Secrets Manager, HashiCorp Vault, Azure Key Vault).
+- Never commit secrets to source control.
+- Never include real credentials in documentation or code examples.
+- Rotate secrets on a regular schedule.
+
+### Least-privilege access
+
+- Grant CRUD only on the Lead object.
+- Use field-level security to restrict which fields the integration user can read and write.
+- Disable API access for all objects the integration does not need.
+
+<Warning>
+Never publish OAuth client secrets, access tokens, or passwords in documentation, logs, or version control.
+</Warning>
