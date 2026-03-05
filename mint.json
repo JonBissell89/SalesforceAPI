@@ -1,0 +1,34 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "API_END_POINT",
+  "theme": "quill",
+  "colors": {
+    "primary": "#0D9373",
+    "light": "#07C983",
+    "dark": "#0D9373"
+  },
+  "navigation": [
+    {
+      "group": "Getting Started",
+      "pages": [
+        "docs/lead-api/overview",
+        "docs/lead-api/authentication"
+      ]
+    },
+    {
+      "group": "Endpoints",
+      "pages": [
+        "docs/lead-api/discover-fields",
+        "docs/lead-api/create-lead",
+        "docs/lead-api/upsert-lead"
+      ]
+    },
+    {
+      "group": "Reference",
+      "pages": [
+        "docs/lead-api/errors-and-security"
+      ]
+    }
+  ],
+  "openapi": "docs/openapi.yaml"
+}
