@@ -6,7 +6,7 @@ description: "Insert a new Lead record into Salesforce production."
 ## Endpoint
 
 ```http
-POST https://yourInstance.salesforce.com/services/data/v60.0/sobjects/Lead
+POST https://luminasolar.my.salesforce.com/services/data/v60.0/sobjects/Lead
 ```
 
 ## Required fields
@@ -17,7 +17,7 @@ Use the [Describe endpoint](/lead-api/discover-fields) to discover additional re
 ## Example request
 
 ```bash
-curl -X POST "https://yourInstance.salesforce.com/services/data/v60.0/sobjects/Lead" \
+curl -X POST "https://luminasolar.my.salesforce.com/services/data/v60.0/sobjects/Lead" \
   -H "Authorization: Bearer ACCESS_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
@@ -34,7 +34,7 @@ curl -X POST "https://yourInstance.salesforce.com/services/data/v60.0/sobjects/L
 
 ```http
 POST /services/data/v60.0/sobjects/Lead HTTP/1.1
-Host: yourInstance.salesforce.com
+Host: luminasolar.my.salesforce.com
 Authorization: Bearer ACCESS_TOKEN
 Content-Type: application/json
 

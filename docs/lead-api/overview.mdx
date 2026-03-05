@@ -24,13 +24,11 @@ It supports three operations:
 
 ## Base URL
 
-All endpoints use your Salesforce production instance URL:
+All endpoints use the Lumina Solar Salesforce production instance:
 
 ```
-https://yourInstance.salesforce.com
+https://luminasolar.my.salesforce.com
 ```
-
-Replace `yourInstance` with the subdomain shown in your browser when logged into Salesforce production (e.g., `na1`, `eu5`, or a My Domain like `acme.my`).
 
 <Tip>
 Use the **upsert** pattern whenever possible. It is idempotent — safe to retry without creating duplicates.

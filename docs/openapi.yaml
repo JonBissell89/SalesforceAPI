@@ -3,13 +3,13 @@ info:
   title: Salesforce Lead Ingestion API
   description: |
     Subset of the Salesforce REST API used for Lead ingestion.
-    All paths are relative to your Salesforce production instance URL
-    (e.g., https://yourInstance.salesforce.com).
+    All paths are relative to the Lumina Solar Salesforce production instance
+    (https://luminasolar.my.salesforce.com).
   version: "1.0.0"
 
 servers:
-  - url: https://yourInstance.salesforce.com
-    description: Salesforce production instance (replace yourInstance with your org's subdomain)
+  - url: https://luminasolar.my.salesforce.com
+    description: Lumina Solar Salesforce production instance
 
 security:
   - bearerAuth: []

@@ -6,7 +6,7 @@ description: "Insert or update a Lead by External ID — the preferred, retry-sa
 ## Endpoint
 
 ```http
-PATCH https://yourInstance.salesforce.com/services/data/v60.0/sobjects/Lead/{ExternalIdField}/{value}
+PATCH https://luminasolar.my.salesforce.com/services/data/v60.0/sobjects/Lead/{ExternalIdField}/{value}
 ```
 
 Replace `{ExternalIdField}` with the API name of your External ID field and `{value}` with the record's external key.
@@ -26,7 +26,7 @@ Replace it with whatever External ID field is defined on Lead in your org.
 
 ```bash
 curl -X PATCH \
-  "https://yourInstance.salesforce.com/services/data/v60.0/sobjects/Lead/External_Id__c/ABC123" \
+  "https://luminasolar.my.salesforce.com/services/data/v60.0/sobjects/Lead/External_Id__c/ABC123" \
   -H "Authorization: Bearer ACCESS_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
@@ -43,7 +43,7 @@ curl -X PATCH \
 
 ```http
 PATCH /services/data/v60.0/sobjects/Lead/External_Id__c/ABC123 HTTP/1.1
-Host: yourInstance.salesforce.com
+Host: luminasolar.my.salesforce.com
 Authorization: Bearer ACCESS_TOKEN
 Content-Type: application/json
 

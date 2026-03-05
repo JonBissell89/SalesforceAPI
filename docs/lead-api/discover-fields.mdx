@@ -6,7 +6,7 @@ description: "Use the Describe endpoint to dynamically discover Lead field API n
 ## Endpoint
 
 ```http
-GET https://yourInstance.salesforce.com/services/data/v60.0/sobjects/Lead/describe
+GET https://luminasolar.my.salesforce.com/services/data/v60.0/sobjects/Lead/describe
 ```
 
 ## Purpose
@@ -16,7 +16,7 @@ The Describe endpoint returns the full schema for the Lead object, including eve
 ## Example request
 
 ```bash
-curl -X GET "https://yourInstance.salesforce.com/services/data/v60.0/sobjects/Lead/describe" \
+curl -X GET "https://luminasolar.my.salesforce.com/services/data/v60.0/sobjects/Lead/describe" \
   -H "Authorization: Bearer ACCESS_TOKEN" \
   -H "Content-Type: application/json"
 ```
