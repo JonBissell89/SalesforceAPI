@@ -3,6 +3,10 @@ title: "Authentication"
 description: "Obtain and use Salesforce OAuth access tokens for production."
 ---
 
+## Before you start
+
+Authentication requires a **Connected App** configured in the Lumina Solar Salesforce org. If one has not been created yet, ask a Salesforce administrator to set it up (see [Prerequisites](/docs/lead-api/overview#prerequisites)). You will need the Connected App's `client_id` and `client_secret`.
+
 ## OAuth 2.0 access tokens
 
 Every request to the Salesforce REST API must include an `Authorization` header with a valid Bearer token.

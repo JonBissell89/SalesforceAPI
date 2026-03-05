@@ -12,6 +12,22 @@ It supports three operations:
 2. **Create** — insert a new Lead.
 3. **Upsert** — insert-or-update a Lead by an External ID field, preventing duplicates and making retries safe.
 
+## Prerequisites
+
+Before these endpoints will work, a Salesforce administrator must complete the following setup in the Lumina Solar production org:
+
+1. **Create a Connected App** — In Salesforce Setup, navigate to **App Manager → New Connected App**. Enable OAuth settings, select the `api` and `refresh_token` scopes, and set a callback URL. This generates the `client_id` and `client_secret` needed for authentication.
+2. **Create a dedicated integration user** — Create a Salesforce user specifically for API access. Assign a profile or permission set that grants:
+   - Read/Write access to the **Lead** object
+   - Field-level security on all Lead fields the integration needs
+   - **API Enabled** permission
+3. **Configure an External ID field** (for upsert) — On the Lead object, create a custom field marked as **External ID** (and optionally **Unique**). See [Upsert a Lead](/docs/lead-api/upsert-lead) for details.
+4. **Distribute credentials securely** — Provide the `client_id`, `client_secret`, and integration user credentials to the API consumer through a secrets manager. Never share credentials via email, chat, or documentation.
+
+<Warning>
+These endpoints are part of the standard Salesforce REST API. They will not work without a Connected App and an authorized integration user in the Lumina Solar org.
+</Warning>
+
 ## High-level flow
 
 ```text
