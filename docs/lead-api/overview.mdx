@@ -5,8 +5,7 @@ description: "Salesforce Lead ingestion API — schema discovery, create, and up
 
 ## Purpose
 
-This integration pushes Lead records into **Salesforce production** via the Salesforce REST API.
-It supports three operations:
+This integration pushes Lead records into **Salesforce production** via the Salesforce REST API. It supports three operations:
 
 1. **Discover** — query the Lead schema so your integration adapts to custom fields automatically.
 2. **Create** — insert a new Lead.
@@ -14,18 +13,10 @@ It supports three operations:
 
 ## Prerequisites
 
-Before these endpoints will work, a Salesforce administrator must complete the following setup in the Lumina Solar production org:
-
-1. **Create a Connected App** — In Salesforce Setup, navigate to **App Manager → New Connected App**. Enable OAuth settings, select the `api` and `refresh_token` scopes, and set a callback URL. This generates the `client_id` and `client_secret` needed for authentication.
-2. **Create a dedicated integration user** — Create a Salesforce user specifically for API access. Assign a profile or permission set that grants:
-   - Read/Write access to the **Lead** object
-   - Field-level security on all Lead fields the integration needs
-   - **API Enabled** permission
-3. **Configure an External ID field** (for upsert) — On the Lead object, create a custom field marked as **External ID** (and optionally **Unique**). See [Upsert a Lead](/docs/lead-api/upsert-lead) for details.
-4. **Distribute credentials securely** — Provide the `client_id`, `client_secret`, and integration user credentials to the API consumer through a secrets manager. Never share credentials via email, chat, or documentation.
+Before these endpoints will work, a Lumina Salesforce administrator must complete must supply a client id and secret
 
 <Warning>
-These endpoints are part of the standard Salesforce REST API. They will not work without a Connected App and an authorized integration user in the Lumina Solar org.
+  These endpoints are part of the standard Salesforce REST API. They will not work without a Connected App and an authorized integration user in the Lumina Solar org.
 </Warning>
 
 ## High-level flow
@@ -42,15 +33,10 @@ These endpoints are part of the standard Salesforce REST API. They will not work
 
 All endpoints use the Lumina Solar Salesforce production instance:
 
-```
+```text
 https://luminasolar.my.salesforce.com
 ```
 
 <Tip>
-Use the **upsert** pattern whenever possible. It is idempotent — safe to retry without creating duplicates.
+  Use the **upsert** pattern whenever possible. It is idempotent — safe to retry without creating duplicates.
 </Tip>
-
-## Required fields
-
-The Lumina Solar org requires **LastName**, **Company**, and **Status** on every Lead record.
-Use the [Describe endpoint](/docs/lead-api/discover-fields) to discover all required and optional fields dynamically, including UTM tracking fields and custom fields.
