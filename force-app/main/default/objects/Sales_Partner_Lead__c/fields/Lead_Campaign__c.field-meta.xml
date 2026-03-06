@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Lead_Campaign__c</fullName>
+    <label>Lead Campaign</label>
+    <description>Name of the partner company sending the lead</description>
+    <type>Text</type>
+    <length>255</length>
+    <required>true</required>
+</CustomField>

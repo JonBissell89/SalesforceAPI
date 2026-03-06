@@ -1,0 +1,87 @@
+---
+title: "Upsert a Sales Partner Lead"
+description: "Insert or update a Sales Partner Lead by External ID — the preferred, retry-safe pattern for Lumina Solar Salesforce production."
+---
+
+## Endpoint
+
+```http
+PATCH https://luminasolar.my.salesforce.com/services/data/v60.0/sobjects/Sales_Partner_Lead__c/{ExternalIdField}/{value}
+```
+
+Replace `{ExternalIdField}` with the API name of your External ID field and `{value}` with the record's external key.
+
+## Why upsert?
+
+- **Idempotent** — retrying the same request will not create duplicates.
+- **Atomic** — Salesforce checks for an existing match and either inserts or updates in a single call.
+- **Preferred pattern** for all production integrations.
+
+## Example External ID field
+
+The Lumina Solar org has a custom field `External_ID__c` (type: string, length: 255) on Sales Partner Lead.
+Use this field to match records by your system's unique identifier.
+
+## Example request
+
+```bash
+curl -X PATCH \
+  "https://luminasolar.my.salesforce.com/services/data/v60.0/sobjects/Sales_Partner_Lead__c/External_ID__c/LEAD-2026-00142" \
+  -H "Authorization: Bearer ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "First_Name__c": "Jon",
+    "Last_Name__c": "Doe",
+    "Email__c": "jon.doe@example.com",
+    "Phone__c": "8025551234",
+    "Street__c": "123 Main St",
+    "City__c": "Saxtons River",
+    "State__c": "VT",
+    "Postal_Code__c": "05154",
+    "UTM_Source__c": "Partner",
+    "OwnerId": "005XXXXXXXXXXXXXXX"
+  }'
+```
+
+## Example request (HTTP)
+
+```http
+PATCH /services/data/v60.0/sobjects/Sales_Partner_Lead__c/External_ID__c/LEAD-2026-00142 HTTP/1.1
+Host: luminasolar.my.salesforce.com
+Authorization: Bearer ACCESS_TOKEN
+Content-Type: application/json
+
+{
+  "First_Name__c": "Jon",
+  "Last_Name__c": "Doe",
+  "Email__c": "jon.doe@example.com",
+  "Phone__c": "8025551234",
+  "Street__c": "123 Main St",
+  "City__c": "Saxtons River",
+  "State__c": "VT",
+  "Postal_Code__c": "05154",
+  "UTM_Source__c": "Partner",
+  "OwnerId": "005XXXXXXXXXXXXXXX"
+}
+```
+
+## Responses
+
+| Outcome | HTTP Status | Body |
+|---|---|---|
+| New record created | **201 Created** | `{ "id": "a7X...", "success": true, "errors": [] }` |
+| Existing record updated | **204 No Content** | *(empty)* |
+| Validation error | **400 Bad Request** | Error array (see [Errors](/docs/lead-api/errors-and-security)) |
+
+## Setting up the External ID field
+
+The `External_ID__c` field already exists on Sales Partner Lead in the Lumina Solar org. If you need a different External ID field:
+
+1. In Salesforce Setup, navigate to **Object Manager → Sales Partner Lead → Fields & Relationships**.
+2. Create a new custom field of type **Text** (or **Number**).
+3. Check **External ID** and (optionally) **Unique**.
+4. Save and note the API name (e.g., `My_External_Key__c`).
+
+<Tip>
+Mark the External ID field as **Unique** to let Salesforce enforce deduplication at the database level.
+</Tip>

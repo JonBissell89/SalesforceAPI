@@ -1,0 +1,99 @@
+---
+title: "Authentication"
+description: "Obtain and use Salesforce OAuth access tokens for production."
+---
+
+## Before you start
+
+Authentication requires a **Connected App** configured in the Lumina Solar Salesforce org. If one has not been created yet, ask a Salesforce administrator to set it up (see [Prerequisites](/docs/lead-api/overview#prerequisites)). You will need the Connected App's `client_id` and `client_secret`.
+
+## OAuth 2.0 access tokens
+
+Every request to the Salesforce REST API must include an `Authorization` header with a valid Bearer token.
+
+```http
+Authorization: Bearer ACCESS_TOKEN
+```
+
+Replace `ACCESS_TOKEN` with a token obtained from the Salesforce OAuth token endpoint.
+
+## Token endpoint
+
+<Warning>
+You **must** use the Lumina Solar My Domain URL for the Client Credentials flow. Using `login.salesforce.com` will return a `request not supported on this domain` error.
+</Warning>
+
+For **Salesforce production** (Client Credentials flow):
+
+```
+https://luminasolar.my.salesforce.com/services/oauth2/token
+```
+
+For **sandbox** (testing only):
+
+```
+https://luminasolar--{sandboxName}.sandbox.my.salesforce.com/services/oauth2/token
+```
+
+## Client Credentials flow (recommended)
+
+The Client Credentials flow is the preferred authentication method. It does not require a username or password — only the `client_id` and `client_secret`.
+
+```bash
+curl -X POST "https://luminasolar.my.salesforce.com/services/oauth2/token" \
+  -d "grant_type=client_credentials" \
+  -d "client_id=YOUR_CONNECTED_APP_CLIENT_ID" \
+  -d "client_secret=YOUR_CONNECTED_APP_CLIENT_SECRET"
+```
+
+<Warning>
+Never hard-code credentials or commit secrets to source control.
+Store `client_id` and `client_secret` in a secrets manager or environment variables.
+</Warning>
+
+## Example response
+
+```json
+{
+  "access_token": "00D...!ARcAQ...",
+  "instance_url": "https://luminasolar.my.salesforce.com",
+  "token_type": "Bearer"
+}
+```
+
+Use `instance_url` from the response as the base URL for all subsequent API calls.
+
+## Step 2 — Get your User ID (OwnerId)
+
+After authenticating, you **must** retrieve your integration user's Salesforce ID. This ID is required as the `OwnerId` field on every record you create.
+
+```bash
+curl -X GET "https://luminasolar.my.salesforce.com/services/data/v60.0/chatter/users/me" \
+  -H "Authorization: Bearer ACCESS_TOKEN"
+```
+
+The response includes your user's `id` field:
+
+```json
+{
+  "id": "005TV00000751sHYAQ",
+  "username": "your-integration-user@luminasolar.com",
+  "displayName": "Your Integration User",
+  ...
+}
+```
+
+Save this `id` value — you will pass it as `OwnerId` in every Create and Upsert request.
+
+<Tip>
+You only need to call this endpoint once. Cache the `id` value and reuse it for all subsequent requests.
+</Tip>
+
+## Best practices
+
+- Use the **Client Credentials** flow — it requires no username/password and is the most secure for server-to-server integrations.
+- Use the **My Domain URL** (`luminasolar.my.salesforce.com`) as the token endpoint, not `login.salesforce.com`.
+- Always retrieve your **User ID** after authenticating and include it as `OwnerId` on every record.
+- Use a **dedicated integration user** with a profile scoped to only the `Sales_Partner_Lead__c` object.
+- Rotate secrets on a regular schedule.
+- Restrict the Connected App's IP ranges and OAuth scopes to the minimum required.
