@@ -1,12 +1,12 @@
 ---
-title: "Upsert a Lead"
-description: "Insert or update a Lead by External ID — the preferred, retry-safe pattern for Lumina Solar Salesforce production."
+title: "Upsert a Sales Partner Lead"
+description: "Insert or update a Sales Partner Lead by External ID — the preferred, retry-safe pattern for Lumina Solar Salesforce production."
 ---
 
 ## Endpoint
 
 ```http
-PATCH https://luminasolar.my.salesforce.com/services/data/v60.0/sobjects/Lead/{ExternalIdField}/{value}
+PATCH https://luminasolar.my.salesforce.com/services/data/v60.0/sobjects/Sales_Partner_Lead__c/{ExternalIdField}/{value}
 ```
 
 Replace `{ExternalIdField}` with the API name of your External ID field and `{value}` with the record's external key.
@@ -19,28 +19,29 @@ Replace `{ExternalIdField}` with the API name of your External ID field and `{va
 
 ## Example External ID field
 
-The Lumina Solar org has a custom field `External_ID__c` (type: string, length: 255) on Lead.
+The Lumina Solar org has a custom field `External_ID__c` (type: string, length: 255) on Sales Partner Lead.
 Use this field to match records by your system's unique identifier.
 
 ## Example request
 
 ```bash
 curl -X PATCH \
-  "https://luminasolar.my.salesforce.com/services/data/v60.0/sobjects/Lead/External_Id__c/LEAD-2026-00142" \
+  "https://luminasolar.my.salesforce.com/services/data/v60.0/sobjects/Sales_Partner_Lead__c/External_ID__c/LEAD-2026-00142" \
   -H "Authorization: Bearer ACCESS_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
-    "FirstName": "Jon",
-    "LastName": "Doe",
-    "Email": "jon.doe@example.com",
-    "Phone": "8025551234",
-    "Street": "123 Main St",
-    "City": "Saxtons River",
-    "State": "VT",
-    "PostalCode": "05154",
+    "First_Name__c": "Jon",
+    "Last_Name__c": "Doe",
+    "Email__c": "jon.doe@example.com",
+    "Phone__c": "8025551234",
+    "Street__c": "123 Main St",
+    "City__c": "Saxtons River",
+    "State__c": "VT",
+    "Postal_Code__c": "05154",
     "Lead_Campaign__c": "Acme Solar Partners",
     "UTM_Source__c": "Partner",
-    "Company": "Doe Roofing LLC",
+    "OwnerId": "005XXXXXXXXXXXXXXX",
+    "Company__c": "Doe Roofing LLC",
     "Average_Electric_Bill__c": 185.00
   }'
 ```
@@ -48,23 +49,24 @@ curl -X PATCH \
 ## Example request (HTTP)
 
 ```http
-PATCH /services/data/v60.0/sobjects/Lead/External_Id__c/LEAD-2026-00142 HTTP/1.1
+PATCH /services/data/v60.0/sobjects/Sales_Partner_Lead__c/External_ID__c/LEAD-2026-00142 HTTP/1.1
 Host: luminasolar.my.salesforce.com
 Authorization: Bearer ACCESS_TOKEN
 Content-Type: application/json
 
 {
-  "FirstName": "Jon",
-  "LastName": "Doe",
-  "Email": "jon.doe@example.com",
-  "Phone": "8025551234",
-  "Street": "123 Main St",
-  "City": "Saxtons River",
-  "State": "VT",
-  "PostalCode": "05154",
+  "First_Name__c": "Jon",
+  "Last_Name__c": "Doe",
+  "Email__c": "jon.doe@example.com",
+  "Phone__c": "8025551234",
+  "Street__c": "123 Main St",
+  "City__c": "Saxtons River",
+  "State__c": "VT",
+  "Postal_Code__c": "05154",
   "Lead_Campaign__c": "Acme Solar Partners",
   "UTM_Source__c": "Partner",
-  "Company": "Doe Roofing LLC",
+  "OwnerId": "005XXXXXXXXXXXXXXX",
+  "Company__c": "Doe Roofing LLC",
   "Average_Electric_Bill__c": 185.00
 }
 ```
@@ -73,15 +75,15 @@ Content-Type: application/json
 
 | Outcome | HTTP Status | Body |
 |---|---|---|
-| New Lead created | **201 Created** | `{ "id": "00Q...", "success": true, "errors": [] }` |
-| Existing Lead updated | **204 No Content** | *(empty)* |
+| New record created | **201 Created** | `{ "id": "a0A...", "success": true, "errors": [] }` |
+| Existing record updated | **204 No Content** | *(empty)* |
 | Validation error | **400 Bad Request** | Error array (see [Errors](/docs/lead-api/errors-and-security)) |
 
 ## Setting up the External ID field
 
-The `External_ID__c` field already exists on Lead in the Lumina Solar org. If you need a different External ID field:
+The `External_ID__c` field already exists on Sales Partner Lead in the Lumina Solar org. If you need a different External ID field:
 
-1. In Salesforce Setup, navigate to **Object Manager → Lead → Fields & Relationships**.
+1. In Salesforce Setup, navigate to **Object Manager → Sales Partner Lead → Fields & Relationships**.
 2. Create a new custom field of type **Text** (or **Number**).
 3. Check **External ID** and (optionally) **Unique**.
 4. Save and note the API name (e.g., `My_External_Key__c`).

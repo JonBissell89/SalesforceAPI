@@ -1,22 +1,22 @@
 ---
-title: "Discover Lead Fields"
-description: "Use the Describe endpoint to dynamically discover Lead field API names, types, and constraints."
+title: "Discover Fields"
+description: "Use the Describe endpoint to dynamically discover Sales Partner Lead field API names, types, and constraints."
 ---
 
 ## Endpoint
 
 ```http
-GET https://luminasolar.my.salesforce.com/services/data/v60.0/sobjects/Lead/describe
+GET https://luminasolar.my.salesforce.com/services/data/v60.0/sobjects/Sales_Partner_Lead__c/describe
 ```
 
 ## Purpose
 
-The Describe endpoint returns the full schema for the Lead object, including every field's API name, data type, length, whether it is required, and valid picklist values. Use it to build integrations that adapt automatically when custom fields are added.
+The Describe endpoint returns the full schema for the Sales Partner Lead object, including every field's API name, data type, length, whether it is required, and valid picklist values. Use it to build integrations that adapt automatically when custom fields are added.
 
 ## Example request
 
 ```bash
-curl -X GET "https://luminasolar.my.salesforce.com/services/data/v60.0/sobjects/Lead/describe" \
+curl -X GET "https://luminasolar.my.salesforce.com/services/data/v60.0/sobjects/Sales_Partner_Lead__c/describe" \
   -H "Authorization: Bearer ACCESS_TOKEN" \
   -H "Content-Type: application/json"
 ```
@@ -25,10 +25,10 @@ curl -X GET "https://luminasolar.my.salesforce.com/services/data/v60.0/sobjects/
 
 ```json
 {
-  "name": "Lead",
+  "name": "Sales_Partner_Lead__c",
   "fields": [
     {
-      "name": "LastName",
+      "name": "Last_Name__c",
       "type": "string",
       "length": 80,
       "nillable": false,
@@ -37,25 +37,22 @@ curl -X GET "https://luminasolar.my.salesforce.com/services/data/v60.0/sobjects/
       "picklistValues": []
     },
     {
-      "name": "Company",
-      "type": "string",
-      "length": 255,
+      "name": "Email__c",
+      "type": "email",
+      "length": 0,
       "nillable": false,
       "createable": true,
       "updateable": true,
       "picklistValues": []
     },
     {
-      "name": "LeadSource",
-      "type": "picklist",
-      "length": 40,
-      "nillable": true,
+      "name": "Lead_Campaign__c",
+      "type": "string",
+      "length": 255,
+      "nillable": false,
       "createable": true,
       "updateable": true,
-      "picklistValues": [
-        { "value": "Web", "active": true },
-        { "value": "Phone Inquiry", "active": true }
-      ]
+      "picklistValues": []
     }
   ]
 }
@@ -65,8 +62,8 @@ curl -X GET "https://luminasolar.my.salesforce.com/services/data/v60.0/sobjects/
 
 | Property | Use |
 |---|---|
-| `createable` | If `true`, the field can be set when creating a Lead. |
-| `updateable` | If `true`, the field can be modified on an existing Lead. |
+| `createable` | If `true`, the field can be set when creating a record. |
+| `updateable` | If `true`, the field can be modified on an existing record. |
 | `nillable` | If `false`, the field is required (must have a value). |
 | `type` / `length` | Validate your payload values before sending. |
 | `picklistValues` | Only submit `active: true` values for picklist fields. |

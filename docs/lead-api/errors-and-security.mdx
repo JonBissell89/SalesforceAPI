@@ -1,6 +1,6 @@
 ---
 title: "Errors & Security"
-description: "Common error codes and security best practices for the Salesforce Lead API."
+description: "Common error codes and security best practices for the Sales Partner Lead API."
 ---
 
 ## Common errors
@@ -11,17 +11,17 @@ Returned when the payload is invalid.
 
 | Error Code | Cause |
 |---|---|
-| `REQUIRED_FIELD_MISSING` | A required field like `LastName` or `Company` is missing. |
-| `INVALID_FIELD` | The request body contains a field API name that does not exist on Lead. |
+| `REQUIRED_FIELD_MISSING` | A required field like `Last_Name__c` or `Email__c` is missing. |
+| `INVALID_FIELD` | The request body contains a field API name that does not exist on Sales_Partner_Lead__c. |
 | `INVALID_TYPE` | A field value does not match the expected data type (e.g., string in a number field). |
 | `INVALID_OR_NULL_FOR_RESTRICTED_PICKLIST` | A picklist value is not in the allowed set. Use the [Describe endpoint](/lead-api/discover-fields) to get valid values. |
 
 ```json
 [
   {
-    "message": "Required fields are missing: [Company]",
+    "message": "Required fields are missing: [Last_Name__c]",
     "errorCode": "REQUIRED_FIELD_MISSING",
-    "fields": ["Company"]
+    "fields": ["Last_Name__c"]
   }
 ]
 ```
@@ -41,13 +41,13 @@ The access token is missing, expired, or invalid. Re-authenticate and retry.
 
 ### 403 Forbidden
 
-The authenticated user does not have permission to create or update Lead records.
+The authenticated user does not have permission to create or update Sales Partner Lead records.
 Check the user's profile, permission sets, and field-level security.
 
 ```json
 [
   {
-    "message": "Insufficient access rights on object: Lead",
+    "message": "Insufficient access rights on object: Sales_Partner_Lead__c",
     "errorCode": "INSUFFICIENT_ACCESS"
   }
 ]
@@ -62,11 +62,22 @@ Follow these practices when connecting to Salesforce production.
 Create a Salesforce user specifically for this integration. Do not reuse a human user's credentials.
 Assign a profile with the **minimum** object and field permissions required.
 
+### Use the My Domain URL for authentication
+
+Always authenticate against the My Domain URL (`luminasolar.my.salesforce.com`), not `login.salesforce.com`. The Client Credentials flow will fail with a `request not supported on this domain` error if you use `login.salesforce.com`.
+
+### Always include OwnerId
+
+Every Create and Upsert request **must** include `OwnerId`. Retrieve your integration user's Salesforce ID by calling `/services/data/v60.0/chatter/users/me` after authentication. Cache this value — it does not change.
+
+### Verify the Connected App Run As user
+
+The Connected App's Client Credentials Flow **Run As** setting determines which Salesforce user context executes API requests. Ensure this is set to your dedicated integration user, not a personal account. If the wrong user is configured, records will be created under the wrong identity.
+
 ### Limit Connected App permissions
 
 - Restrict OAuth scopes to `api` and `refresh_token` only.
 - Set IP restrictions on the Connected App to allow only your integration servers.
-- Enable the **Require Proof Key for Code Exchange (PKCE)** option when possible.
 
 ### Protect secrets
 
@@ -77,7 +88,7 @@ Assign a profile with the **minimum** object and field permissions required.
 
 ### Least-privilege access
 
-- Grant CRUD only on the Lead object.
+- Grant CRUD only on the `Sales_Partner_Lead__c` object.
 - Use field-level security to restrict which fields the integration user can read and write.
 - Disable API access for all objects the integration does not need.
 

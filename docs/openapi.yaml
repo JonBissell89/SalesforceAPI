@@ -1,8 +1,8 @@
 openapi: 3.0.3
 info:
-  title: Salesforce Lead Ingestion API
+  title: Sales Partner Lead Ingestion API
   description: |
-    Subset of the Salesforce REST API used for Lead ingestion.
+    Subset of the Salesforce REST API used for Sales Partner Lead ingestion.
     All paths are relative to the Lumina Solar Salesforce production instance
     (https://luminasolar.my.salesforce.com).
   version: "1.0.0"
@@ -15,16 +15,16 @@ security:
   - bearerAuth: []
 
 paths:
-  /services/data/v60.0/sobjects/Lead/describe:
+  /services/data/v60.0/sobjects/Sales_Partner_Lead__c/describe:
     get:
-      operationId: describeLead
-      summary: Describe Lead object
-      description: Returns metadata for the Lead object including all fields, types, and constraints.
+      operationId: describeSalesPartnerLead
+      summary: Describe Sales Partner Lead object
+      description: Returns metadata for the Sales_Partner_Lead__c object including all fields, types, and constraints.
       tags:
-        - Lead
+        - Sales Partner Lead
       responses:
         "200":
-          description: Lead object metadata
+          description: Sales Partner Lead object metadata
           content:
             application/json:
               schema:
@@ -32,22 +32,22 @@ paths:
         "401":
           $ref: "#/components/responses/Unauthorized"
 
-  /services/data/v60.0/sobjects/Lead:
+  /services/data/v60.0/sobjects/Sales_Partner_Lead__c:
     post:
-      operationId: createLead
-      summary: Create a Lead
-      description: Inserts a new Lead record. Requires at least LastName and Company.
+      operationId: createSalesPartnerLead
+      summary: Create a Sales Partner Lead
+      description: Inserts a new Sales_Partner_Lead__c record.
       tags:
-        - Lead
+        - Sales Partner Lead
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/LeadInput"
+              $ref: "#/components/schemas/SalesPartnerLeadInput"
       responses:
         "201":
-          description: Lead created
+          description: Record created
           content:
             application/json:
               schema:
@@ -59,23 +59,23 @@ paths:
         "403":
           $ref: "#/components/responses/Forbidden"
 
-  /services/data/v60.0/sobjects/Lead/{ExternalIdField}/{externalIdValue}:
+  /services/data/v60.0/sobjects/Sales_Partner_Lead__c/{ExternalIdField}/{externalIdValue}:
     patch:
-      operationId: upsertLead
-      summary: Upsert a Lead by External ID
+      operationId: upsertSalesPartnerLead
+      summary: Upsert a Sales Partner Lead by External ID
       description: |
-        Inserts or updates a Lead matched by the given External ID field and value.
+        Inserts or updates a Sales_Partner_Lead__c matched by the given External ID field and value.
         Returns 201 if created, 204 if updated.
       tags:
-        - Lead
+        - Sales Partner Lead
       parameters:
         - name: ExternalIdField
           in: path
           required: true
-          description: API name of the External ID field (e.g., External_Id__c).
+          description: API name of the External ID field (e.g., External_ID__c).
           schema:
             type: string
-            example: External_Id__c
+            example: External_ID__c
         - name: externalIdValue
           in: path
           required: true
@@ -88,16 +88,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/LeadInput"
+              $ref: "#/components/schemas/SalesPartnerLeadInput"
       responses:
         "201":
-          description: Lead created (no match found)
+          description: Record created (no match found)
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/SaveResult"
         "204":
-          description: Lead updated (existing match found)
+          description: Record updated (existing match found)
         "400":
           $ref: "#/components/responses/BadRequest"
         "401":
@@ -113,71 +113,46 @@ components:
       description: Salesforce OAuth 2.0 access token
 
   schemas:
-    LeadInput:
+    SalesPartnerLeadInput:
       type: object
       required:
-        - FirstName
-        - LastName
-        - Email
-        - Phone
-        - Street
-        - City
-        - State
-        - PostalCode
+        - First_Name__c
+        - Last_Name__c
+        - Email__c
+        - Phone__c
+        - Street__c
+        - City__c
+        - State__c
+        - Postal_Code__c
         - Lead_Campaign__c
         - UTM_Source__c
+        - OwnerId
       properties:
-        FirstName:
+        First_Name__c:
           type: string
           example: Jon
-        LastName:
+        Last_Name__c:
           type: string
           example: Doe
-        Company:
-          type: string
-          example: Doe Roofing LLC
-        Email:
+        Email__c:
           type: string
           format: email
           example: jon.doe@example.com
-        Phone:
+        Phone__c:
           type: string
           example: "8025551234"
-        MobilePhone:
-          type: string
-          example: "8025559876"
-        Street:
+        Street__c:
           type: string
           example: 123 Main St
-        City:
+        City__c:
           type: string
           example: Saxtons River
-        State:
+        State__c:
           type: string
           example: VT
-        PostalCode:
+        Postal_Code__c:
           type: string
           example: "05154"
-        Country:
-          type: string
-          example: US
-        Status:
-          type: string
-          description: "Required picklist field (e.g., New, Contacted, Qualified)."
-          example: New
-        LeadSource:
-          type: string
-          example: Web
-        Industry:
-          type: string
-          example: Utilities
-        Website:
-          type: string
-          format: uri
-          example: https://example.com
-        NumberOfEmployees:
-          type: integer
-          example: 10
         Lead_Campaign__c:
           type: string
           description: "Required. Name of the partner company sending the lead."
@@ -186,6 +161,36 @@ components:
           type: string
           description: "Required. Must be set to 'Partner' for all partner-submitted leads."
           example: Partner
+        OwnerId:
+          type: string
+          description: "Required. 18-character Salesforce User or Queue ID. Retrieve via /chatter/users/me."
+          example: "005XXXXXXXXXXXXXXX"
+        External_ID__c:
+          type: string
+          description: External system identifier for upsert matching.
+          example: LEAD-2026-00142
+        Company__c:
+          type: string
+          example: Doe Roofing LLC
+        Mobile_Phone__c:
+          type: string
+          example: "8025559876"
+        Average_Electric_Bill__c:
+          type: number
+          description: Monthly electric bill in USD.
+          example: 185.00
+        Electric_Provider__c:
+          type: string
+          example: Green Mountain Power
+        Appointment_Type__c:
+          type: string
+        Lead_Type__c:
+          type: string
+        County__c:
+          type: string
+        Notes__c:
+          type: string
+          description: Free-text notes.
         UTM_Medium__c:
           type: string
           description: UTM Medium tracking parameter.
@@ -208,25 +213,17 @@ components:
         Landing_Page_URL__c:
           type: string
           example: https://luminasolar.com/get-quote
-        gclid_Google_Click_ID__c:
+        gclid__c:
           type: string
           description: Google Click ID for ad attribution.
           example: EAIaIQobChMI...
-        fbclid_Facebook_Click_ID__c:
+        fbclid__c:
           type: string
           description: Facebook Click ID for ad attribution.
           example: AbC123dEf456
         Channel__c:
           type: string
           example: Paid Search
-        Average_Electric_Bill__c:
-          type: number
-          description: Monthly electric bill in USD.
-          example: 185.00
-        External_ID__c:
-          type: string
-          description: External system identifier for upsert matching.
-          example: LEAD-2026-00142
       additionalProperties: true
 
     SaveResult:
@@ -234,7 +231,7 @@ components:
       properties:
         id:
           type: string
-          example: "00Q5e000001abc1EAA"
+          example: "a0ATV000001abc1EAA"
         success:
           type: boolean
           example: true
@@ -260,7 +257,7 @@ components:
       properties:
         name:
           type: string
-          example: Lead
+          example: Sales_Partner_Lead__c
         fields:
           type: array
           items:
@@ -306,7 +303,7 @@ components:
             items:
               $ref: "#/components/schemas/ApiError"
     Forbidden:
-      description: The authenticated user lacks permission on the Lead object.
+      description: The authenticated user lacks permission on the Sales_Partner_Lead__c object.
       content:
         application/json:
           schema:

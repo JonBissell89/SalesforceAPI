@@ -1,19 +1,19 @@
 ---
 title: "Overview"
-description: "Salesforce Lead ingestion API — schema discovery, create, and upsert patterns."
+description: "Sales Partner Lead ingestion API — schema discovery, create, and upsert patterns."
 ---
 
 ## Purpose
 
-This integration pushes Lead records into **Salesforce production** via the Salesforce REST API. It supports three operations:
+This integration pushes Sales Partner Lead records into **Salesforce production** via the Salesforce REST API. Partners use a dedicated custom object (`Sales_Partner_Lead__c`) that is isolated from internal Lead data. It supports three operations:
 
-1. **Discover** — query the Lead schema so your integration adapts to custom fields automatically.
-2. **Create** — insert a new Lead.
-3. **Upsert** — insert-or-update a Lead by an External ID field, preventing duplicates and making retries safe.
+1. **Discover** — query the Sales Partner Lead schema so your integration adapts to custom fields automatically.
+2. **Create** — insert a new Sales Partner Lead.
+3. **Upsert** — insert-or-update a Sales Partner Lead by an External ID field, preventing duplicates and making retries safe.
 
 ## Prerequisites
 
-Before these endpoints will work, a Lumina Salesforce administrator must complete must supply a client id and secret
+Before these endpoints will work, a Lumina Salesforce administrator must supply a client id and secret
 
 <Warning>
   These endpoints are part of the standard Salesforce REST API. They will not work without a Connected App and an authorized integration user in the Lumina Solar org.
@@ -22,11 +22,12 @@ Before these endpoints will work, a Lumina Salesforce administrator must complet
 ## High-level flow
 
 ```text
-1. Authenticate   →  obtain an OAuth access token
-2. Describe Lead  →  GET  /services/data/v60.0/sobjects/Lead/describe
-3. Create Lead    →  POST /services/data/v60.0/sobjects/Lead
+1. Authenticate                 →  obtain an OAuth access token
+2. Get your User ID             →  GET  /services/data/v60.0/chatter/users/me
+3. Describe Sales Partner Lead  →  GET  /services/data/v60.0/sobjects/Sales_Partner_Lead__c/describe
+4. Create Sales Partner Lead    →  POST /services/data/v60.0/sobjects/Sales_Partner_Lead__c
    — or —
-   Upsert Lead    →  PATCH /services/data/v60.0/sobjects/Lead/{ExternalIdField}/{value}
+   Upsert Sales Partner Lead    →  PATCH /services/data/v60.0/sobjects/Sales_Partner_Lead__c/{ExternalIdField}/{value}
 ```
 
 ## Base URL
@@ -43,6 +44,6 @@ https://luminasolar.my.salesforce.com
 
 ## Required fields
 
-Every Lead submitted through this API must include: **FirstName**, **LastName**, **Email**, **Phone**, **Street**, **City**, **State**, **PostalCode**, **Lead_Campaign__c** (name of the partner company sending the lead), and **UTM_Source__c** (must be set to `Partner`).
+Every Sales Partner Lead submitted through this API must include: **First_Name__c**, **Last_Name__c**, **Email__c**, **Phone__c**, **Street__c**, **City__c**, **State__c**, **Postal_Code__c**, **Lead_Campaign__c** (name of the partner company sending the lead), **UTM_Source__c** (must be set to `Partner`), and **OwnerId** (Salesforce User or Queue ID that should own the record).
 
-See [Create a Lead](/docs/lead-api/create-lead) for the full required fields table and examples.
+See [Create a Sales Partner Lead](/docs/lead-api/create-lead) for the full required fields table and examples.
