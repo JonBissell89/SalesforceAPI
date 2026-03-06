@@ -11,17 +11,24 @@ POST https://luminasolar.my.salesforce.com/services/data/v60.0/sobjects/Lead
 
 ## Required fields
 
-The following fields are **required** when creating a Lead (non-nullable and createable):
+Every Lead submitted through this API **must** include the following fields:
 
-| API Name | Type | Label |
-|---|---|---|
-| `LastName` | string | Last Name |
-| `Company` | string | Company |
-| `Status` | picklist | Status |
+| API Name | Type | Label | Notes |
+|---|---|---|---|
+| `FirstName` | string | First Name | |
+| `LastName` | string | Last Name | |
+| `Email` | email | Email | |
+| `Phone` | phone | Phone | |
+| `Street` | textarea | Street | |
+| `City` | string | City | |
+| `State` | string | State/Province | |
+| `PostalCode` | string | Zip/Postal Code | |
+| `Lead_Campaign__c` | picklist | Secondary Campaign Source | Name of the company sending the lead |
+| `UTM_Source__c` | string | UTM Source | Must be set to `Partner` |
 
-<Note>
-Several boolean fields also default as required (`DoNotCall`, `HasOptedOutOfEmail`, etc.) but Salesforce auto-defaults them to `false` if omitted. The three fields above are the ones you must always include in your payload.
-</Note>
+<Warning>
+Requests missing any of these fields will be rejected. `Lead_Campaign__c` must contain the name of the partner company submitting the lead, and `UTM_Source__c` must always be set to `Partner`.
+</Warning>
 
 ## Standard fields reference
 
@@ -92,20 +99,15 @@ curl -X POST "https://luminasolar.my.salesforce.com/services/data/v60.0/sobjects
   -d '{
     "FirstName": "Jon",
     "LastName": "Doe",
-    "Company": "Doe Roofing LLC",
     "Email": "jon.doe@example.com",
     "Phone": "8025551234",
+    "Street": "123 Main St",
     "City": "Saxtons River",
     "State": "VT",
     "PostalCode": "05154",
-    "Status": "New",
-    "LeadSource": "Web",
-    "UTM_Source__c": "google",
-    "UTM_Medium__c": "cpc",
-    "UTM_Campaign__c": "solar-spring-2026",
-    "UTM_Content__c": "hero-banner",
-    "UTM_Term__c": "solar panels vermont",
-    "gclid_Google_Click_ID__c": "EAIaIQobChMI...",
+    "Lead_Campaign__c": "Acme Solar Partners",
+    "UTM_Source__c": "Partner",
+    "Company": "Doe Roofing LLC",
     "Average_Electric_Bill__c": 185.00
   }'
 ```
@@ -121,17 +123,16 @@ Content-Type: application/json
 {
   "FirstName": "Jon",
   "LastName": "Doe",
-  "Company": "Doe Roofing LLC",
   "Email": "jon.doe@example.com",
   "Phone": "8025551234",
+  "Street": "123 Main St",
   "City": "Saxtons River",
   "State": "VT",
   "PostalCode": "05154",
-  "Status": "New",
-  "LeadSource": "Web",
-  "UTM_Source__c": "google",
-  "UTM_Medium__c": "cpc",
-  "UTM_Campaign__c": "solar-spring-2026"
+  "Lead_Campaign__c": "Acme Solar Partners",
+  "UTM_Source__c": "Partner",
+  "Company": "Doe Roofing LLC",
+  "Average_Electric_Bill__c": 185.00
 }
 ```
 

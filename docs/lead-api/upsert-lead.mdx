@@ -32,17 +32,15 @@ curl -X PATCH \
   -d '{
     "FirstName": "Jon",
     "LastName": "Doe",
-    "Company": "Doe Roofing LLC",
     "Email": "jon.doe@example.com",
     "Phone": "8025551234",
+    "Street": "123 Main St",
     "City": "Saxtons River",
     "State": "VT",
     "PostalCode": "05154",
-    "Status": "New",
-    "LeadSource": "Web",
-    "UTM_Source__c": "google",
-    "UTM_Medium__c": "cpc",
-    "UTM_Campaign__c": "solar-spring-2026",
+    "Lead_Campaign__c": "Acme Solar Partners",
+    "UTM_Source__c": "Partner",
+    "Company": "Doe Roofing LLC",
     "Average_Electric_Bill__c": 185.00
   }'
 ```
@@ -58,17 +56,16 @@ Content-Type: application/json
 {
   "FirstName": "Jon",
   "LastName": "Doe",
-  "Company": "Doe Roofing LLC",
   "Email": "jon.doe@example.com",
   "Phone": "8025551234",
+  "Street": "123 Main St",
   "City": "Saxtons River",
   "State": "VT",
   "PostalCode": "05154",
-  "Status": "New",
-  "LeadSource": "Web",
-  "UTM_Source__c": "google",
-  "UTM_Medium__c": "cpc",
-  "UTM_Campaign__c": "solar-spring-2026"
+  "Lead_Campaign__c": "Acme Solar Partners",
+  "UTM_Source__c": "Partner",
+  "Company": "Doe Roofing LLC",
+  "Average_Electric_Bill__c": 185.00
 }
 ```
 

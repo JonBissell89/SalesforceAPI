@@ -40,3 +40,9 @@ https://luminasolar.my.salesforce.com
 <Tip>
   Use the **upsert** pattern whenever possible. It is idempotent — safe to retry without creating duplicates.
 </Tip>
+
+## Required fields
+
+Every Lead submitted through this API must include: **FirstName**, **LastName**, **Email**, **Phone**, **Street**, **City**, **State**, **PostalCode**, **Lead_Campaign__c** (name of the partner company sending the lead), and **UTM_Source__c** (must be set to `Partner`).
+
+See [Create a Lead](/docs/lead-api/create-lead) for the full required fields table and examples.

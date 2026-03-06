@@ -116,9 +116,16 @@ components:
     LeadInput:
       type: object
       required:
+        - FirstName
         - LastName
-        - Company
-        - Status
+        - Email
+        - Phone
+        - Street
+        - City
+        - State
+        - PostalCode
+        - Lead_Campaign__c
+        - UTM_Source__c
       properties:
         FirstName:
           type: string
@@ -171,10 +178,14 @@ components:
         NumberOfEmployees:
           type: integer
           example: 10
+        Lead_Campaign__c:
+          type: string
+          description: "Required. Name of the partner company sending the lead."
+          example: Acme Solar Partners
         UTM_Source__c:
           type: string
-          description: UTM Source tracking parameter.
-          example: google
+          description: "Required. Must be set to 'Partner' for all partner-submitted leads."
+          example: Partner
         UTM_Medium__c:
           type: string
           description: UTM Medium tracking parameter.
