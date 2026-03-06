@@ -82,7 +82,7 @@ paths:
           description: The external ID value to match.
           schema:
             type: string
-            example: ABC123
+            example: LEAD-2026-00142
       requestBody:
         required: true
         content:
@@ -118,26 +118,104 @@ components:
       required:
         - LastName
         - Company
+        - Status
       properties:
         FirstName:
           type: string
-          example: Jonathan
+          example: Jon
         LastName:
           type: string
-          example: Bissell
+          example: Doe
         Company:
           type: string
-          example: Example Company
+          example: Doe Roofing LLC
         Email:
           type: string
           format: email
-          example: jonathan@example.com
+          example: jon.doe@example.com
+        Phone:
+          type: string
+          example: "8025551234"
+        MobilePhone:
+          type: string
+          example: "8025559876"
+        Street:
+          type: string
+          example: 123 Main St
         City:
           type: string
           example: Saxtons River
         State:
           type: string
           example: VT
+        PostalCode:
+          type: string
+          example: "05154"
+        Country:
+          type: string
+          example: US
+        Status:
+          type: string
+          description: "Required picklist field (e.g., New, Contacted, Qualified)."
+          example: New
+        LeadSource:
+          type: string
+          example: Web
+        Industry:
+          type: string
+          example: Utilities
+        Website:
+          type: string
+          format: uri
+          example: https://example.com
+        NumberOfEmployees:
+          type: integer
+          example: 10
+        UTM_Source__c:
+          type: string
+          description: UTM Source tracking parameter.
+          example: google
+        UTM_Medium__c:
+          type: string
+          description: UTM Medium tracking parameter.
+          example: cpc
+        UTM_Campaign__c:
+          type: string
+          description: UTM Campaign tracking parameter.
+          example: solar-spring-2026
+        UTM_Content__c:
+          type: string
+          description: UTM Content tracking parameter.
+          example: hero-banner
+        UTM_Term__c:
+          type: string
+          description: UTM Term tracking parameter.
+          example: solar panels vermont
+        Traffic_Source__c:
+          type: string
+          example: Google Ads
+        Landing_Page_URL__c:
+          type: string
+          example: https://luminasolar.com/get-quote
+        gclid_Google_Click_ID__c:
+          type: string
+          description: Google Click ID for ad attribution.
+          example: EAIaIQobChMI...
+        fbclid_Facebook_Click_ID__c:
+          type: string
+          description: Facebook Click ID for ad attribution.
+          example: AbC123dEf456
+        Channel__c:
+          type: string
+          example: Paid Search
+        Average_Electric_Bill__c:
+          type: number
+          description: Monthly electric bill in USD.
+          example: 185.00
+        External_ID__c:
+          type: string
+          description: External system identifier for upsert matching.
+          example: LEAD-2026-00142
       additionalProperties: true
 
     SaveResult:
