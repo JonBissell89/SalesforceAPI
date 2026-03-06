@@ -38,11 +38,8 @@ curl -X PATCH \
     "City__c": "Saxtons River",
     "State__c": "VT",
     "Postal_Code__c": "05154",
-    "Lead_Campaign__c": "Acme Solar Partners",
     "UTM_Source__c": "Partner",
-    "OwnerId": "005XXXXXXXXXXXXXXX",
-    "Company__c": "Doe Roofing LLC",
-    "Average_Electric_Bill__c": 185.00
+    "OwnerId": "005XXXXXXXXXXXXXXX"
   }'
 ```
 
@@ -63,11 +60,8 @@ Content-Type: application/json
   "City__c": "Saxtons River",
   "State__c": "VT",
   "Postal_Code__c": "05154",
-  "Lead_Campaign__c": "Acme Solar Partners",
   "UTM_Source__c": "Partner",
-  "OwnerId": "005XXXXXXXXXXXXXXX",
-  "Company__c": "Doe Roofing LLC",
-  "Average_Electric_Bill__c": 185.00
+  "OwnerId": "005XXXXXXXXXXXXXXX"
 }
 ```
 
@@ -75,7 +69,7 @@ Content-Type: application/json
 
 | Outcome | HTTP Status | Body |
 |---|---|---|
-| New record created | **201 Created** | `{ "id": "a0A...", "success": true, "errors": [] }` |
+| New record created | **201 Created** | `{ "id": "a7X...", "success": true, "errors": [] }` |
 | Existing record updated | **204 No Content** | *(empty)* |
 | Validation error | **400 Bad Request** | Error array (see [Errors](/docs/lead-api/errors-and-security)) |
 

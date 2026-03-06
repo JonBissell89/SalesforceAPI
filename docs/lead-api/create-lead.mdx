@@ -23,53 +23,27 @@ Every Sales Partner Lead submitted through this API **must** include the followi
 | `City__c` | string | City | |
 | `State__c` | string | State | |
 | `Postal_Code__c` | string | Postal Code | |
-| `Lead_Campaign__c` | string | Lead Campaign | Name of the company sending the lead |
 | `UTM_Source__c` | string | UTM Source | Must be set to `Partner` |
 | `OwnerId` | reference | Owner | Your integration user's Salesforce ID (see [Authentication](/docs/lead-api/authentication#step-2--get-your-user-id-ownerid)) |
 
 <Warning>
-Requests missing any of these fields will be rejected. `Lead_Campaign__c` must contain the name of the partner company submitting the lead, `UTM_Source__c` must always be set to `Partner`, and `OwnerId` must be a valid Salesforce User or Queue ID retrieved from the `/chatter/users/me` endpoint.
+Requests missing any of these fields will be rejected. `UTM_Source__c` must always be set to `Partner`, and `OwnerId` must be a valid Salesforce User or Queue ID retrieved from the `/chatter/users/me` endpoint.
 </Warning>
 
-### External ID (recommended)
+## Read-only fields
 
-| API Name | Type | Label | Notes |
-|---|---|---|---|
-| `External_ID__c` | string | External ID | Required if you want a response body on upsert |
-
-`External_ID__c` is not strictly required, but **you must include it if you want Salesforce to return a response** (record ID) on upsert. Without it, you cannot use the [upsert endpoint](/docs/lead-api/upsert-lead) and will not receive confirmation of which record was created or updated.
-
-## Optional fields
-
-These fields are not required but can be included in the request body:
+These fields are visible on the object but **cannot be set** by the partner integration user. They are managed internally by Lumina Solar:
 
 | API Name | Type | Label |
 |---|---|---|
-| `Company__c` | string | Company |
-| `Mobile_Phone__c` | phone | Mobile Phone |
 | `Average_Electric_Bill__c` | currency | Average Electric Bill |
 | `Electric_Provider__c` | string | Electric Provider |
-| `Appointment_Type__c` | string | Appointment Type |
-| `Lead_Type__c` | string | Lead Sales Type |
-| `County__c` | string | County |
+| `External_ID__c` | string | External ID |
 | `Notes__c` | textarea | Notes |
-
-## UTM and tracking fields
-
-These fields capture marketing attribution data:
-
-| API Name | Type | Label |
-|---|---|---|
-| `UTM_Source__c` | string | UTM Source |
 | `UTM_Medium__c` | string | UTM Medium |
 | `UTM_Campaign__c` | string | UTM Campaign |
 | `UTM_Content__c` | string | UTM Content |
 | `UTM_Term__c` | string | UTM Term |
-| `Traffic_Source__c` | string | Traffic Source |
-| `Landing_Page_URL__c` | textarea | Landing Page URL |
-| `fbclid__c` | string | fbclid (Facebook Click ID) |
-| `gclid__c` | string | gclid (Google Click ID) |
-| `Channel__c` | string | Channel |
 
 ## Example request
 
@@ -86,11 +60,8 @@ curl -X POST "https://luminasolar.my.salesforce.com/services/data/v60.0/sobjects
     "City__c": "Saxtons River",
     "State__c": "VT",
     "Postal_Code__c": "05154",
-    "Lead_Campaign__c": "Acme Solar Partners",
     "UTM_Source__c": "Partner",
-    "OwnerId": "005XXXXXXXXXXXXXXX",
-    "Company__c": "Doe Roofing LLC",
-    "Average_Electric_Bill__c": 185.00
+    "OwnerId": "005XXXXXXXXXXXXXXX"
   }'
 ```
 
@@ -111,11 +82,8 @@ Content-Type: application/json
   "City__c": "Saxtons River",
   "State__c": "VT",
   "Postal_Code__c": "05154",
-  "Lead_Campaign__c": "Acme Solar Partners",
   "UTM_Source__c": "Partner",
-  "OwnerId": "005XXXXXXXXXXXXXXX",
-  "Company__c": "Doe Roofing LLC",
-  "Average_Electric_Bill__c": 185.00
+  "OwnerId": "005XXXXXXXXXXXXXXX"
 }
 ```
 
@@ -123,7 +91,7 @@ Content-Type: application/json
 
 ```json
 {
-  "id": "a0ATV000001abc1EAA",
+  "id": "a7XTV000000TyC52AK",
   "success": true,
   "errors": []
 }

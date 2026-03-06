@@ -124,7 +124,6 @@ components:
         - City__c
         - State__c
         - Postal_Code__c
-        - Lead_Campaign__c
         - UTM_Source__c
         - OwnerId
       properties:
@@ -153,10 +152,6 @@ components:
         Postal_Code__c:
           type: string
           example: "05154"
-        Lead_Campaign__c:
-          type: string
-          description: "Required. Name of the partner company sending the lead."
-          example: Acme Solar Partners
         UTM_Source__c:
           type: string
           description: "Required. Must be set to 'Partner' for all partner-submitted leads."
@@ -165,73 +160,13 @@ components:
           type: string
           description: "Required. 18-character Salesforce User or Queue ID. Retrieve via /chatter/users/me."
           example: "005XXXXXXXXXXXXXXX"
-        External_ID__c:
-          type: string
-          description: External system identifier for upsert matching.
-          example: LEAD-2026-00142
-        Company__c:
-          type: string
-          example: Doe Roofing LLC
-        Mobile_Phone__c:
-          type: string
-          example: "8025559876"
-        Average_Electric_Bill__c:
-          type: number
-          description: Monthly electric bill in USD.
-          example: 185.00
-        Electric_Provider__c:
-          type: string
-          example: Green Mountain Power
-        Appointment_Type__c:
-          type: string
-        Lead_Type__c:
-          type: string
-        County__c:
-          type: string
-        Notes__c:
-          type: string
-          description: Free-text notes.
-        UTM_Medium__c:
-          type: string
-          description: UTM Medium tracking parameter.
-          example: cpc
-        UTM_Campaign__c:
-          type: string
-          description: UTM Campaign tracking parameter.
-          example: solar-spring-2026
-        UTM_Content__c:
-          type: string
-          description: UTM Content tracking parameter.
-          example: hero-banner
-        UTM_Term__c:
-          type: string
-          description: UTM Term tracking parameter.
-          example: solar panels vermont
-        Traffic_Source__c:
-          type: string
-          example: Google Ads
-        Landing_Page_URL__c:
-          type: string
-          example: https://luminasolar.com/get-quote
-        gclid__c:
-          type: string
-          description: Google Click ID for ad attribution.
-          example: EAIaIQobChMI...
-        fbclid__c:
-          type: string
-          description: Facebook Click ID for ad attribution.
-          example: AbC123dEf456
-        Channel__c:
-          type: string
-          example: Paid Search
-      additionalProperties: true
 
     SaveResult:
       type: object
       properties:
         id:
           type: string
-          example: "a0ATV000001abc1EAA"
+          example: "a7XTV000000TyC52AK"
         success:
           type: boolean
           example: true
