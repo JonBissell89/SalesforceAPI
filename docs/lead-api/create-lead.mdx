@@ -30,6 +30,14 @@ Every Lead submitted through this API **must** include the following fields:
 Requests missing any of these fields will be rejected. `Lead_Campaign__c` must contain the name of the partner company submitting the lead, and `UTM_Source__c` must always be set to `Partner`.
 </Warning>
 
+### External ID (recommended)
+
+| API Name | Type | Label | Notes |
+|---|---|---|---|
+| `External_ID__c` | string | External ID | Required if you want a response body on upsert |
+
+`External_ID__c` is not strictly required, but **you must include it if you want Salesforce to return a response** (record ID) on upsert. Without it, you cannot use the [upsert endpoint](/docs/lead-api/upsert-lead) and will not receive confirmation of which record was created or updated.
+
 ## Standard fields reference
 
 These are the most commonly used standard Lead fields:
