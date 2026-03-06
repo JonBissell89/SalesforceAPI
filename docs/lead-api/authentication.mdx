@@ -35,9 +35,9 @@ For **sandbox** (testing only):
 https://luminasolar--{sandboxName}.sandbox.my.salesforce.com/services/oauth2/token
 ```
 
-## Client Credentials flow (recommended)
+## Client Credentials flow
 
-The Client Credentials flow is the preferred authentication method. It does not require a username or password — only the `client_id` and `client_secret`.
+Authenticate using the `client_id` and `client_secret` provided by Lumina Solar. No username or password is needed.
 
 ```bash
 curl -X POST "https://luminasolar.my.salesforce.com/services/oauth2/token" \
@@ -91,9 +91,6 @@ You only need to call this endpoint once. Cache the `id` value and reuse it for 
 
 ## Best practices
 
-- Use the **Client Credentials** flow — it requires no username/password and is the most secure for server-to-server integrations.
 - Use the **My Domain URL** (`luminasolar.my.salesforce.com`) as the token endpoint, not `login.salesforce.com`.
 - Always retrieve your **User ID** after authenticating and include it as `OwnerId` on every record.
-- Use a **dedicated integration user** with a profile scoped to only the `Sales_Partner_Lead__c` object.
 - Rotate secrets on a regular schedule.
-- Restrict the Connected App's IP ranges and OAuth scopes to the minimum required.
